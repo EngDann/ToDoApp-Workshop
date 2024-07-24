@@ -274,3 +274,280 @@ Se você deseja contribuir para o projeto, sinta-se à vontade para enviar um Pu
 5. **Abra um Pull Request**.
 
 ---
+
+# 🇬🇧
+
+# Task App
+
+A simple task management application developed in React Native. This app allows you to add, edit, and mark tasks as complete, as well as save and load your tasks locally.
+
+## Features
+
+- Add new tasks.
+- Edit existing tasks.
+- Mark tasks as complete.
+- Store tasks locally using `AsyncStorage`.
+- User-friendly interface with scrolling support and keyboard adjustment.
+
+## Technologies
+
+- **React Native**: Framework for building mobile applications.
+- **TypeScript**: A superset of JavaScript that adds static typing.
+- **React Hooks**: For managing state and side effects.
+- **AsyncStorage**: For local data storage.
+- **FontAwesome**: For interface icons.
+
+## Prerequisites
+
+Before getting started, make sure you have the following installed on your machine:
+
+- **Node.js** (recommended version: 14.x or later)
+- **npm** (Node.js package manager) or **Yarn**
+- **Watchman** (for macOS systems, can be installed via Homebrew)
+- **React Native CLI** (Command line tool for React Native)
+- **Android Studio** or **Xcode** (for iOS development)
+- **Android Studio** (for Android development)
+
+### Installation Steps
+
+### 1. Install Node.js and npm
+
+If you don't have Node.js installed, download and install the recommended version from the [official site](https://nodejs.org/).
+
+### 2. Install Yarn (optional, but recommended)
+
+Yarn is an alternative to npm and can be installed globally using npm:
+
+```bash
+npm install -g yarn
+```
+
+### 3. Install Watchman (macOS only)
+
+If you're using macOS, install Watchman using Homebrew:
+
+```bash
+brew install watchman
+```
+
+### 4. Install the React Native CLI
+
+Install the React Native command-line tool globally:
+
+```bash
+npm install -g react-native-cli
+```
+
+or
+
+```bash
+yarn global add react-native-cli
+```
+
+### 5. Set Up Android Studio
+
+1. Download and install [Android Studio](https://developer.android.com/studio).
+2. During installation, make sure to include the following options in the Android Studio installer:
+
+   - Android SDK
+   - Android SDK Platform
+   - Android Virtual Device
+
+3. Open Android Studio, go to `Settings` > `Appearance & Behavior` > `System Settings` > `Android SDK`.
+4. Under `SDK Platforms`, select the latest version of Android (recommend Android 10.0).
+5. Under `SDK Tools`, make sure the following options are checked:
+
+   - Android SDK Build-Tools
+   - Android Emulator
+   - Android SDK Platform-Tools
+   - Android SDK Tools
+
+6. Configure a virtual device (AVD) in `Settings` > `System Settings` > `Android SDK` > `SDK Tools` > `Android Virtual Device`.
+
+### 6. Set Up Your Development Environment
+
+Follow the instructions in the [React Native environment setup guide](https://reactnative.dev/docs/environment-setup) to configure your environment for iOS or Android development.
+
+### 7. Clone the Repository
+
+Clone the project repository to your local machine:
+
+```bash
+git clone https://github.com/username/repository-name.git
+```
+
+### 8. Navigate to the Project Directory
+
+Change to the directory where the project was cloned:
+
+```bash
+cd repository-name
+```
+
+### 9. Install Project Dependencies
+
+Install all necessary dependencies for the project. You can use npm or Yarn:
+
+```bash
+npm install
+```
+
+or
+
+```bash
+yarn install
+```
+
+after:
+
+```bash
+npm install @react-native-async-storage/async-storage
+```
+
+```bash
+npm install @fortawesome/react-native-fontawesome @fortawesome/fontawesome-svg-core react-native-svg
+```
+
+```bash
+npm install @fortawesome/free-solid-svg-icons
+```
+
+### 10. Run the Application
+
+#### For iOS (simulator)
+
+Make sure you have Xcode installed and properly configured.
+
+1. Navigate to the `ios` directory:
+
+   ```bash
+   cd ios
+   ```
+
+2. Install CocoaPods dependencies:
+
+   ```bash
+   pod install
+   ```
+
+3. Return to the main directory:
+
+   ```bash
+   cd ..
+   ```
+
+4. Run the application on the iOS simulator:
+
+   ```bash
+   npx react-native run-ios
+   ```
+
+#### For iOS (Physical Device)
+
+1. **Connect the iOS device to the computer via a USB cable.**
+
+2. **Open Xcode and open the iOS project:**
+
+   - Navigate to the `ios` directory of the project and open the `.xcworkspace` file in Xcode.
+
+3. **Select the device from the list of devices in Xcode:**
+
+   - In Xcode, select the connected physical device from the device list at the top of the screen.
+
+4. **Make sure the app is configured to run on the device:**
+
+   - In `Signing & Capabilities`, configure code signing if needed.
+
+5. **Run the application on the device:**
+
+   - Click the `Run` button (play icon) in Xcode to build and install the app on the physical device.
+
+#### For Android (emulator)
+
+Make sure you have a configured Android emulator or a connected physical device.
+
+1. Run the application on the Android emulator or physical device:
+
+   ```bash
+   npx react-native run-android
+   ```
+
+#### For Android (Physical Device)
+
+1. **Enable Developer Mode and USB Debugging on your Android device:**
+
+   - Go to `Settings` > `About phone`.
+   - Tap on `Build number` several times until you see a message indicating that you are now a developer.
+   - Go back to `Settings` and access `Developer options`.
+   - Enable `USB debugging`.
+
+2. **Connect the device to the computer via a USB cable.**
+
+3. **Make sure the device is visible to Android Debug Bridge (ADB):**
+
+   - Run the following command in the terminal to check if the device is listed:
+
+     ```bash
+     adb devices
+     ```
+
+   - If the device is listed, you're good to go. Otherwise, check the USB connection and debugging permissions.
+
+4. **Run the application on the device:**
+
+   - In the project directory, run the following command:
+
+     ```bash
+     npx react-native start
+     ```
+
+   - In another terminal, run the following command:
+
+     ```bash
+     npx react-native run-android
+     ```
+
+---
+
+These steps will ensure that you can test and run the app directly on your physical device.
+
+### 11. Using the App
+
+- To add a new task, type the text in the input box and press the "+" button.
+- To edit an existing task, tap the task in the list and make the desired changes.
+- To mark a task as complete, tap the task in the list.
+- Tasks are stored locally and persist even after closing the app.
+
+## Project Structure
+
+- `App.tsx`: Main application component.
+- `components/Task.tsx`: Component for displaying a task.
+- `functions/taskFunctions.ts`: Utility functions for adding, editing, and completing tasks.
+- `services/storageService.ts`: Functions for saving and loading tasks using `AsyncStorage`.
+
+## Contributing
+
+If you would like to contribute to the project, feel free to submit a Pull Request. Please ensure that you follow the style guidelines and keep the code clean and well-documented.
+
+1. **Fork the repository**.
+2. **Create a branch for your feature**:
+
+   ```bash
+   git checkout -b my-feature
+   ```
+
+3. **Make your changes and commit**:
+
+   ```bash
+   git commit -am 'Add new feature'
+   ```
+
+4. **Push the branch to the remote repository**:
+
+   ```bash
+   git push origin my-feature
+   ```
+
+5. **Open a Pull Request**.
+
+---
