@@ -1,15 +1,25 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Keyboard, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Tarefa from './components/Tarefa';
 
 export default function App() {
-  const [tarefa, setTarefa] = useState<string | null>(null);
+  const [tarefa, setTarefa] = useState<string | null>('');
   const [tarefas, setTarefas] = useState<string[]>([]);
 
+  useEffect(() => {
+    carregarTarefas();
+  }, []);
+
+  useEffect(() => {
+    salvarTarefas(tarefas);
+  }, [tarefas]);
+
   const adicionarTarefa = () => {
-    if (tarefa) {
-      setTarefas([...tarefas, tarefa]);
-      setTarefa(null);
+    if (tarefa && tarefa.trim() !== '') {
+      setTarefas([...tarefas, tarefa.trim()]);
+      setTarefa('');
       Keyboard.dismiss();
     }
   };
@@ -17,6 +27,25 @@ export default function App() {
   const deletarTarefa = (index: number) => {
     const novasTarefas = tarefas.filter((_, i) => i !== index);
     setTarefas(novasTarefas);
+  };
+
+  const carregarTarefas = async () => {
+    try {
+      const tarefasSalvas = await AsyncStorage.getItem('tarefas');
+      if (tarefasSalvas !== null) {
+        setTarefas(JSON.parse(tarefasSalvas));
+      }
+    } catch (error) {
+      console.error("Erro ao carregar tarefas", error);
+    }
+  };
+
+  const salvarTarefas = async (novasTarefas: string[]) => {
+    try {
+      await AsyncStorage.setItem('tarefas', JSON.stringify(novasTarefas));
+    } catch (error) {
+      console.error("Erro ao salvar tarefas", error);
+    }
   };
 
   return (
@@ -45,7 +74,8 @@ export default function App() {
       >
         <TextInput
           style={estilos.input}
-          placeholder='Escreva uma tarefa' placeholderTextColor={'#000000'}
+          placeholder='Escreva uma tarefa'
+          placeholderTextColor={'#000000'}
           value={tarefa || ''}
           onChangeText={setTarefa}
         />
