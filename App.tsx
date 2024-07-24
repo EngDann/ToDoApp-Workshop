@@ -1,52 +1,22 @@
-
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Keyboard, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Tarefa from './components/Tarefa';
+import { salvarTarefas, carregarTarefas } from './services/storageService';
+import { adicionarOuEditarTarefa, deletarTarefa, iniciarEdicao } from './functions/taskFunctions';
 
 export default function App() {
   const [tarefa, setTarefa] = useState<string | null>('');
   const [tarefas, setTarefas] = useState<string[]>([]);
+  const [editIndex, setEditIndex] = useState<number | null>(null);
 
   useEffect(() => {
-    carregarTarefas();
+    carregarTarefas().then(setTarefas);
   }, []);
 
   useEffect(() => {
     salvarTarefas(tarefas);
   }, [tarefas]);
-
-  const adicionarTarefa = () => {
-    if (tarefa && tarefa.trim() !== '') {
-      setTarefas([...tarefas, tarefa.trim()]);
-      setTarefa('');
-      Keyboard.dismiss();
-    }
-  };
-
-  const deletarTarefa = (index: number) => {
-    const novasTarefas = tarefas.filter((_, i) => i !== index);
-    setTarefas(novasTarefas);
-  };
-
-  const carregarTarefas = async () => {
-    try {
-      const tarefasSalvas = await AsyncStorage.getItem('tarefas');
-      if (tarefasSalvas !== null) {
-        setTarefas(JSON.parse(tarefasSalvas));
-      }
-    } catch (error) {
-      console.error("Erro ao carregar tarefas", error);
-    }
-  };
-
-  const salvarTarefas = async (novasTarefas: string[]) => {
-    try {
-      await AsyncStorage.setItem('tarefas', JSON.stringify(novasTarefas));
-    } catch (error) {
-      console.error("Erro ao salvar tarefas", error);
-    }
-  };
 
   return (
     <View style={estilos.container}>
@@ -58,11 +28,12 @@ export default function App() {
           <Text style={estilos.sectionTitle}>Tarefas de Hoje</Text>
           <View style={estilos.items}>
             {tarefas.map((item, index) => (
-              <Tarefa
-                key={index}
-                texto={item}
-                onDelete={() => deletarTarefa(index)}
-              />
+              <TouchableOpacity key={index} onPress={() => iniciarEdicao(index, tarefas, setTarefa, setEditIndex)}>
+                <Tarefa
+                  texto={item}
+                  onDelete={() => deletarTarefa(index, tarefas, setTarefas)}
+                />
+              </TouchableOpacity>
             ))}
           </View>
         </View>
@@ -79,9 +50,9 @@ export default function App() {
           value={tarefa || ''}
           onChangeText={setTarefa}
         />
-        <TouchableOpacity onPress={adicionarTarefa}>
+        <TouchableOpacity onPress={() => adicionarOuEditarTarefa(tarefa, editIndex, setTarefas, setTarefa, tarefas, setEditIndex)}>
           <View style={estilos.addWrapper}>
-            <Text style={estilos.addText}>+</Text>
+            <Text style={estilos.addText}>{editIndex !== null ? '✓' : '+'}</Text>
           </View>
         </TouchableOpacity>
       </KeyboardAvoidingView>

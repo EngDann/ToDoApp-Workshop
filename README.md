@@ -2,12 +2,14 @@
 
 # Aplicativo de Tarefas
 
-Um simples aplicativo de gerenciamento de tarefas desenvolvido em React Native. Este aplicativo permite que você adicione e marque tarefas como concluídas.
+Um simples aplicativo de gerenciamento de tarefas desenvolvido em React Native. Este aplicativo permite que você adicione, edite e marque tarefas como concluídas, além de salvar e carregar suas tarefas localmente.
 
 ## Funcionalidades
 
 - Adicionar novas tarefas.
+- Editar tarefas existentes.
 - Marcar tarefas como concluídas.
+- Armazenar tarefas localmente usando `AsyncStorage`.
 - Interface amigável com suporte para rolagem e ajuste de teclado.
 
 ## Tecnologias
@@ -15,6 +17,8 @@ Um simples aplicativo de gerenciamento de tarefas desenvolvido em React Native. 
 - **React Native**: Framework para construção de aplicativos móveis.
 - **TypeScript**: Superset de JavaScript que adiciona tipagem estática.
 - **React Hooks**: Para gerenciamento de estado e efeitos colaterais.
+- **AsyncStorage**: Para armazenamento local de dados.
+- **FontAwesome**: Para ícones de interface.
 
 ## Pré-requisitos
 
@@ -117,6 +121,20 @@ ou
 yarn install
 ```
 
+depois:
+
+```bash
+npm install @react-native-async-storage/async-storage
+```
+
+```bash
+npm install @fortawesome/react-native-fontawesome @fortawesome/fontawesome-svg-core react-native-svg
+```
+
+```bash
+npm install @fortawesome/free-solid-svg-icons
+```
+
 ### 10. Execute o aplicativo
 
 #### Para iOS (emulador)
@@ -164,6 +182,7 @@ Certifique-se de ter o Xcode instalado e configurado corretamente.
    - Em `Signing & Capabilities`, configure a assinatura do código se necessário.
 
 5. **Execute o aplicativo no dispositivo:**
+
    - Clique no botão `Run` (ícone de play) no Xcode para compilar e instalar o aplicativo no dispositivo físico.
 
 #### Para Android (emulador)
@@ -175,8 +194,6 @@ Certifique-se de ter um emulador Android configurado ou um dispositivo físico c
    ```bash
    npx react-native run-android
    ```
-
-Claro! Aqui está o tópico detalhado sobre como executar o aplicativo em um celular físico:
 
 #### Para Android (Físico)
 
@@ -201,13 +218,13 @@ Claro! Aqui está o tópico detalhado sobre como executar o aplicativo em um cel
 
 4. **Execute o aplicativo no dispositivo:**
 
-   - No diretório do projeto, execute o seguinte comando :
+   - No diretório do projeto, execute o seguinte comando:
 
      ```bash
      npx react-native start
      ```
 
-   - Em outro terminal, execute o seguinte comando :
+   - Em outro terminal, execute o seguinte comando:
 
      ```bash
      npx react-native run-android
@@ -220,13 +237,16 @@ Esses passos garantirão que você possa testar e executar o aplicativo diretame
 ### 11. Uso do aplicativo
 
 - Para adicionar uma nova tarefa, digite o texto na caixa de entrada e pressione o botão "+".
+- Para editar uma tarefa existente, toque na tarefa na lista e faça as alterações desejadas.
 - Para marcar uma tarefa como concluída, toque na tarefa na lista.
+- As tarefas são salvas localmente e persistem mesmo após o fechamento do aplicativo.
 
 ## Estrutura do Projeto
 
 - `App.tsx`: Componente principal do aplicativo.
 - `components/Tarefa.tsx`: Componente para exibição de uma tarefa.
-- `functions/tarefaFunctions.ts`: Funções utilitárias para adicionar e completar tarefas.
+- `functions/taskFunctions.ts`: Funções utilitárias para adicionar, editar e completar tarefas.
+- `services/storageService.ts`: Funções para salvar e carregar tarefas usando `AsyncStorage`.
 
 ## Contribuindo
 
@@ -252,3 +272,5 @@ Se você deseja contribuir para o projeto, sinta-se à vontade para enviar um Pu
    ```
 
 5. **Abra um Pull Request**.
+
+---
