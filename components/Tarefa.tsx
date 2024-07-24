@@ -1,18 +1,23 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faTrash} from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
   texto: string;
+  onDelete: () => void;
 }
 
-const Tarefa: React.FC<Props> = ({ texto }) => {
+const Tarefa: React.FC<Props> = ({ texto, onDelete }) => {
   return (
     <View style={estilos.item}>
       <View style={estilos.itemEsquerda}>
         <View style={estilos.quadrado}></View>
         <Text style={estilos.textoItem}>{texto}</Text>
       </View>
-      <View style={estilos.circular}></View>
+      <TouchableOpacity onPress={onDelete}>
+        <FontAwesomeIcon icon={faTrash} style={estilos.iconeDeletar} />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -35,7 +40,7 @@ const estilos = StyleSheet.create({
   quadrado: {
     width: 24,
     height: 24,
-    backgroundColor: '#8d55f6',
+    backgroundColor: '#039aff',
     opacity: 0.4,
     borderRadius: 5,
     marginRight: 15,
@@ -44,12 +49,9 @@ const estilos = StyleSheet.create({
     maxWidth: '80%',
     color: '#000000',
   },
-  circular: {
-    width: 12,
-    height: 12,
-    borderColor: '#8d55f6',
-    borderWidth: 2,
-    borderRadius: 5,
+  iconeDeletar: {
+    color: '#ff0303',
+    fontSize: 24,
   },
 });
 

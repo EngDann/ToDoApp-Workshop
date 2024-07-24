@@ -1,69 +1,55 @@
-import React, {useState} from 'react';
-import {
-  KeyboardAvoidingView,
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  Keyboard,
-  ScrollView,
-  Platform,
-} from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Keyboard, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import Tarefa from './components/Tarefa';
-import {adicionarTarefa, completarTarefa} from './functions/tarefaFunctions';
 
 export default function App() {
   const [tarefa, setTarefa] = useState<string | null>(null);
-  const [itensTarefa, setItensTarefa] = useState<string[]>([]);
+  const [tarefas, setTarefas] = useState<string[]>([]);
 
-  const adicionarTarefaHandler = () => {
-    Keyboard.dismiss();
-    setItensTarefa(adicionarTarefa(itensTarefa, tarefa));
-    setTarefa(null);
+  const adicionarTarefa = () => {
+    if (tarefa) {
+      setTarefas([...tarefas, tarefa]);
+      setTarefa(null);
+      Keyboard.dismiss();
+    }
   };
 
-  const completarTarefaHandler = (index: number) => {
-    setItensTarefa(completarTarefa(itensTarefa, index));
+  const deletarTarefa = (index: number) => {
+    const novasTarefas = tarefas.filter((_, i) => i !== index);
+    setTarefas(novasTarefas);
   };
 
   return (
     <View style={estilos.container}>
-      {/* Adicionado este ScrollView para permitir rolagem quando a lista ficar maior que a tela */}
       <ScrollView
-        contentContainerStyle={{flexGrow: 1}}
+        contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps='handled'
       >
-        {/* Tarefas de Hoje */}
         <View style={estilos.taskWrapper}>
           <Text style={estilos.sectionTitle}>Tarefas de Hoje</Text>
-          <View style={estilos.itens}>
-            {/* As tarefas serão exibidas aqui! */}
-            {itensTarefa.map((item, index) => (
-              <TouchableOpacity
+          <View style={estilos.items}>
+            {tarefas.map((item, index) => (
+              <Tarefa
                 key={index}
-                onPress={() => completarTarefaHandler(index)}>
-                <Tarefa texto={item} />
-              </TouchableOpacity>
+                texto={item}
+                onDelete={() => deletarTarefa(index)}
+              />
             ))}
           </View>
         </View>
       </ScrollView>
 
-      {/* Adicionar uma tarefa */}
-      {/* Usa um KeyboardAvoidingView para garantir que o teclado não cubra os itens na tela */}
       <KeyboardAvoidingView 
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={estilos.writeTaskWrapper}
       >
-        <TextInput 
-          style={estilos.input} 
-          placeholder={'Escreva uma tarefa'} 
-          value={tarefa || ''} 
-          onChangeText={texto => setTarefa(texto)} 
-          placeholderTextColor="#000000" // Cor preta para o texto do placeholder
+        <TextInput
+          style={estilos.input}
+          placeholder='Escreva uma tarefa' placeholderTextColor={'#000000'}
+          value={tarefa || ''}
+          onChangeText={setTarefa}
         />
-        <TouchableOpacity onPress={adicionarTarefaHandler}>
+        <TouchableOpacity onPress={adicionarTarefa}>
           <View style={estilos.addWrapper}>
             <Text style={estilos.addText}>+</Text>
           </View>
@@ -87,7 +73,7 @@ const estilos = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000000',
   },
-  itens: {
+  items: {
     marginTop: 20,
   },
   writeTaskWrapper: {

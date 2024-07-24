@@ -5,7 +5,7 @@ export const adicionarTarefa = (itens: string[], tarefa: string | null): string[
     return itens;
   }
   
-  export const completarTarefa = (itens: string[], index: number): string[] => {
+  export const deletarTarefa = (itens: string[], index: number): string[] => {
     const itensCopia = [...itens];
     itensCopia.splice(index, 1);
     return itensCopia;
