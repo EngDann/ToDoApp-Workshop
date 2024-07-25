@@ -2,7 +2,7 @@
 
 # Aplicativo de Tarefas
 
-Um simples aplicativo de gerenciamento de tarefas desenvolvido em React Native. Este aplicativo permite que você adicione, edite e marque tarefas como concluídas, além de salvar e carregar suas tarefas localmente.
+Este é um elegante e funcional aplicativo de gerenciamento de tarefas, desenvolvido com React Native. Através deste aplicativo intuitivo, você pode facilmente adicionar novas tarefas, editar as existentes e marcar aquelas que foram concluídas. Além disso, o aplicativo garante que suas tarefas sejam salvas e carregadas localmente, oferecendo uma experiência contínua e eficiente.
 
 ## Funcionalidades
 
@@ -273,48 +273,142 @@ Se você deseja contribuir para o projeto, sinta-se à vontade para enviar um Pu
 
 5. **Abra um Pull Request**.
 
----
+## Bônus (como gerar o arquivo .apk)
+
+Para gerar um arquivo .apk executável, você precisa assinar seu APK com uma chave de upload e configurar algumas opções no Gradle:
+
+### Passo 1: Gerar uma Chave de Upload
+
+1. **No Windows e Linux:**
+
+   Na pasta raiz execute o comando:
+
+   ```bash
+   keytool -genkeypair -v -storetype PKCS12 -keystore my-upload-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
+   ```
+
+   Isso gerará um arquivo `my-upload-key.keystore`.
+
+2. **No macOS:**
+
+   Primeiro, encontre o diretório do JDK com:
+
+   ```bash
+   /usr/libexec/java_home
+   ```
+
+   Navegue até o diretório e execute:
+
+   ```bash
+   sudo keytool -genkey -v -keystore my-upload-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
+   ```
+
+   Isso gerará o arquivo `my-upload-key.keystore`.
+
+   **Importante:** Mantenha sua chave privada segura. Se perder a chave ou ela for comprometida, siga as instruções da [documentação do Android](https://developer.android.com/studio/publish/app-signing#lost-key) para recuperação.
+
+### Passo 2: Configurar Variáveis do Gradle
+
+1. **Coloque o arquivo `my-upload-key.keystore` na pasta `android/app` do seu projeto.**
+
+2. **Adicione as variáveis de configuração ao arquivo `gradle.properties`:**
+
+   - **No Linux/macOS:** Adicione no arquivo `~/.gradle/gradle.properties`.
+   - **No Windows:** Adicione no arquivo `android/gradle.properties` ou crie um arquivo `~/.gradle/gradle.properties`.
+
+   Adicione o seguinte conteúdo, substituindo as variáveis com suas informações:
+
+   ```properties
+   MYAPP_UPLOAD_STORE_FILE=my-upload-key.keystore
+   MYAPP_UPLOAD_KEY_ALIAS=my-key-alias
+   MYAPP_UPLOAD_STORE_PASSWORD=*****
+   MYAPP_UPLOAD_KEY_PASSWORD=*****
+   ```
+
+### Passo 3: Configurar o Gradle para Assinatura
+
+1. **Edite o arquivo `android/app/build.gradle`:**
+
+   Adicione a configuração de assinatura no bloco `android`:
+
+   ```gradle
+   android {
+       ...
+       signingConfigs {
+           release {
+               if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
+                   storeFile file(MYAPP_UPLOAD_STORE_FILE)
+                   storePassword MYAPP_UPLOAD_STORE_PASSWORD
+                   keyAlias MYAPP_UPLOAD_KEY_ALIAS
+                   keyPassword MYAPP_UPLOAD_KEY_PASSWORD
+               }
+           }
+       }
+       buildTypes {
+           release {
+               signingConfig signingConfigs.release
+               minifyEnabled false
+               proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+           }
+       }
+   }
+   ```
+
+### Passo 4: Gerar o APK
+
+```gradle
+cd android
+./gradlew assembleRelease
+```
+
+Este comando cria um APK de release, que pode ser encontrado em `android/app/build/outputs/apk/release/`.
+
+### Passo 5: Localizar a pasta e enviar para o celular
+
+**1. Este comando cria um APK de release, que pode ser encontrado em `android/app/build/outputs/apk/release/`.**
+
+**2. Envie o arquivo para o celular via google Drive ou da forma que preferir**
 
 # 🇬🇧
 
 # Task App
 
-A simple task management application developed in React Native. This app allows you to add, edit, and mark tasks as complete, as well as save and load your tasks locally.
+This is a sleek and functional task management application, developed with React Native. Through this intuitive app, you can effortlessly add new tasks, edit existing ones, and mark tasks as completed. Additionally, the app ensures that your tasks are saved and loaded locally, providing a seamless and efficient experience.
 
 ## Features
 
 - Add new tasks.
 - Edit existing tasks.
-- Mark tasks as complete.
+- Mark tasks as completed.
 - Store tasks locally using `AsyncStorage`.
-- User-friendly interface with scrolling support and keyboard adjustment.
+- User-friendly interface with scroll support and keyboard adjustment.
 
 ## Technologies
 
-- **React Native**: Framework for building mobile applications.
-- **TypeScript**: A superset of JavaScript that adds static typing.
-- **React Hooks**: For managing state and side effects.
+- **React Native**: Framework for building mobile apps.
+- **TypeScript**: Superset of JavaScript that adds static typing.
+- **React Hooks**: For state management and side effects.
 - **AsyncStorage**: For local data storage.
 - **FontAwesome**: For interface icons.
 
 ## Prerequisites
 
-Before getting started, make sure you have the following installed on your machine:
+Before you start, ensure you have the following installed on your machine:
 
 - **Node.js** (recommended version: 14.x or later)
 - **npm** (Node.js package manager) or **Yarn**
-- **Watchman** (for macOS systems, can be installed via Homebrew)
-- **React Native CLI** (Command line tool for React Native)
-- **Android Studio** or **Xcode** (for iOS development)
+- **Watchman** (for macOS, can be installed via Homebrew)
+- **React Native CLI** (React Native command-line tool)
+- **Android Emulator** or **Xcode** (for iOS development)
 - **Android Studio** (for Android development)
 
 ### Installation Steps
 
 ### 1. Install Node.js and npm
 
-If you don't have Node.js installed, download and install the recommended version from the [official site](https://nodejs.org/).
+If you do not have Node.js installed, download and install the recommended version from the [official site](https://nodejs.org/).
 
-### 2. Install Yarn (optional, but recommended)
+### 2. Install Yarn (optional but recommended)
 
 Yarn is an alternative to npm and can be installed globally using npm:
 
@@ -324,13 +418,13 @@ npm install -g yarn
 
 ### 3. Install Watchman (macOS only)
 
-If you're using macOS, install Watchman using Homebrew:
+If you are using macOS, install Watchman using Homebrew:
 
 ```bash
 brew install watchman
 ```
 
-### 4. Install the React Native CLI
+### 4. Install React Native CLI
 
 Install the React Native command-line tool globally:
 
@@ -354,31 +448,31 @@ yarn global add react-native-cli
    - Android Virtual Device
 
 3. Open Android Studio, go to `Settings` > `Appearance & Behavior` > `System Settings` > `Android SDK`.
-4. Under `SDK Platforms`, select the latest version of Android (recommend Android 10.0).
-5. Under `SDK Tools`, make sure the following options are checked:
+4. In `SDK Platforms`, select the latest version of Android (recommended: Android 10.0).
+5. In `SDK Tools`, ensure the following options are checked:
 
    - Android SDK Build-Tools
    - Android Emulator
    - Android SDK Platform-Tools
    - Android SDK Tools
 
-6. Configure a virtual device (AVD) in `Settings` > `System Settings` > `Android SDK` > `SDK Tools` > `Android Virtual Device`.
+6. Set up an Android Virtual Device (AVD) in `Settings` > `System Settings` > `Android SDK` > `SDK Tools` > `Android Virtual Device`.
 
-### 6. Set Up Your Development Environment
+### 6. Set Up Development Environment
 
-Follow the instructions in the [React Native environment setup guide](https://reactnative.dev/docs/environment-setup) to configure your environment for iOS or Android development.
+Follow the instructions in the [React Native environment setup guide](https://reactnative.dev/docs/environment-setup) to set up your environment for iOS or Android development.
 
 ### 7. Clone the Repository
 
 Clone the project repository to your local machine:
 
 ```bash
-git clone https://github.com/username/repository-name.git
+git clone https://github.com/user/repository-name.git
 ```
 
 ### 8. Navigate to the Project Directory
 
-Change to the directory where the project was cloned:
+Access the directory where the project was cloned:
 
 ```bash
 cd repository-name
@@ -386,7 +480,7 @@ cd repository-name
 
 ### 9. Install Project Dependencies
 
-Install all necessary dependencies for the project. You can use npm or Yarn:
+Install all the necessary dependencies for the project. You can use npm or Yarn:
 
 ```bash
 npm install
@@ -398,7 +492,7 @@ or
 yarn install
 ```
 
-after:
+Then:
 
 ```bash
 npm install @react-native-async-storage/async-storage
@@ -412,11 +506,11 @@ npm install @fortawesome/react-native-fontawesome @fortawesome/fontawesome-svg-c
 npm install @fortawesome/free-solid-svg-icons
 ```
 
-### 10. Run the Application
+### 10. Run the App
 
-#### For iOS (simulator)
+#### For iOS (Simulator)
 
-Make sure you have Xcode installed and properly configured.
+Make sure you have Xcode installed and configured properly.
 
 1. Navigate to the `ios` directory:
 
@@ -430,13 +524,13 @@ Make sure you have Xcode installed and properly configured.
    pod install
    ```
 
-3. Return to the main directory:
+3. Go back to the main directory:
 
    ```bash
    cd ..
    ```
 
-4. Run the application on the iOS simulator:
+4. Run the app on the iOS simulator:
 
    ```bash
    npx react-native run-ios
@@ -444,29 +538,29 @@ Make sure you have Xcode installed and properly configured.
 
 #### For iOS (Physical Device)
 
-1. **Connect the iOS device to the computer via a USB cable.**
+1. **Connect the iOS device to your computer with a USB cable.**
 
 2. **Open Xcode and open the iOS project:**
 
    - Navigate to the `ios` directory of the project and open the `.xcworkspace` file in Xcode.
 
-3. **Select the device from the list of devices in Xcode:**
+3. **Select the device in the list of devices in Xcode:**
 
    - In Xcode, select the connected physical device from the device list at the top of the screen.
 
-4. **Make sure the app is configured to run on the device:**
+4. **Ensure the app is set up for device deployment:**
 
    - In `Signing & Capabilities`, configure code signing if needed.
 
-5. **Run the application on the device:**
+5. **Run the app on the device:**
 
    - Click the `Run` button (play icon) in Xcode to build and install the app on the physical device.
 
-#### For Android (emulator)
+#### For Android (Emulator)
 
-Make sure you have a configured Android emulator or a connected physical device.
+Ensure you have an Android emulator set up or a physical device connected.
 
-1. Run the application on the Android emulator or physical device:
+1. Run the app on the Android emulator or physical device:
 
    ```bash
    npx react-native run-android
@@ -474,16 +568,16 @@ Make sure you have a configured Android emulator or a connected physical device.
 
 #### For Android (Physical Device)
 
-1. **Enable Developer Mode and USB Debugging on your Android device:**
+1. **Enable developer mode and USB debugging on your Android device:**
 
    - Go to `Settings` > `About phone`.
-   - Tap on `Build number` several times until you see a message indicating that you are now a developer.
+   - Tap `Build number` several times until you see a message indicating that you are now a developer.
    - Go back to `Settings` and access `Developer options`.
    - Enable `USB debugging`.
 
-2. **Connect the device to the computer via a USB cable.**
+2. **Connect the device to your computer with a USB cable.**
 
-3. **Make sure the device is visible to Android Debug Bridge (ADB):**
+3. **Ensure the device is visible to Android Debug Bridge (ADB):**
 
    - Run the following command in the terminal to check if the device is listed:
 
@@ -491,9 +585,9 @@ Make sure you have a configured Android emulator or a connected physical device.
      adb devices
      ```
 
-   - If the device is listed, you're good to go. Otherwise, check the USB connection and debugging permissions.
+   - If the device is listed, you are ready to proceed. If not, check the USB connection and debugging permissions.
 
-4. **Run the application on the device:**
+4. **Run the app on the device:**
 
    - In the project directory, run the following command:
 
@@ -501,7 +595,7 @@ Make sure you have a configured Android emulator or a connected physical device.
      npx react-native start
      ```
 
-   - In another terminal, run the following command:
+   - In another terminal, run:
 
      ```bash
      npx react-native run-android
@@ -509,25 +603,25 @@ Make sure you have a configured Android emulator or a connected physical device.
 
 ---
 
-These steps will ensure that you can test and run the app directly on your physical device.
+These steps will ensure you can test and run the app directly on your physical device.
 
 ### 11. Using the App
 
 - To add a new task, type the text in the input box and press the "+" button.
-- To edit an existing task, tap the task in the list and make the desired changes.
-- To mark a task as complete, tap the task in the list.
-- Tasks are stored locally and persist even after closing the app.
+- To edit an existing task, tap on the task in the list and make the desired changes.
+- To mark a task as complete, tap on the task in the list.
+- Tasks are saved locally and persist even after the app is closed.
 
 ## Project Structure
 
-- `App.tsx`: Main application component.
+- `App.tsx`: Main component of the app.
 - `components/Task.tsx`: Component for displaying a task.
 - `functions/taskFunctions.ts`: Utility functions for adding, editing, and completing tasks.
 - `services/storageService.ts`: Functions for saving and loading tasks using `AsyncStorage`.
 
 ## Contributing
 
-If you would like to contribute to the project, feel free to submit a Pull Request. Please ensure that you follow the style guidelines and keep the code clean and well-documented.
+If you would like to contribute to the project, feel free to submit a Pull Request. Be sure to follow style guidelines and keep the code clean and well-documented.
 
 1. **Fork the repository**.
 2. **Create a branch for your feature**:
@@ -550,4 +644,98 @@ If you would like to contribute to the project, feel free to submit a Pull Reque
 
 5. **Open a Pull Request**.
 
----
+## Bonus (How to Generate the .apk File)
+
+To generate an executable .apk file, you need to sign your APK with an upload key and configure some options in Gradle:
+
+### Step 1: Generate an Upload Key
+
+1. **On Windows and Linux:**
+
+   In the root folder, run:
+
+   ```bash
+   keytool -genkeypair -v -storetype PKCS12 -keystore my-upload-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
+   ```
+
+   This will generate a `my-upload-key.keystore` file.
+
+2. **On macOS:**
+
+   First, locate the JDK directory with:
+
+   ```bash
+   /usr/libexec/java_home
+   ```
+
+   Navigate to the directory and run:
+
+   ```bash
+   sudo keytool -genkey -v -keystore my-upload-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
+   ```
+
+   This will generate the `my-upload-key.keystore` file.
+
+   **Important:** Keep your private key secure. If you lose the key or it is compromised, follow the [Android documentation](https://developer.android.com/studio/publish/app-signing#lost-key) for recovery.
+
+### Step 2: Configure Gradle Variables
+
+1. **Place the `my-upload-key.keystore` file in the `android/app` folder of your project.**
+
+2. **Add the Gradle configuration variables to the `gradle.properties` file:**
+
+   - **On Linux/macOS:** Add to `~/.gradle/gradle.properties`.
+   - **On Windows:** Add to `android/gradle.properties` or create a `~/.gradle/gradle.properties` file.
+     Add the following content, replacing the placeholders with your information:
+
+   ```properties
+   MYAPP_UPLOAD_STORE_FILE=my-upload-key.keystore
+   MYAPP_UPLOAD_KEY_ALIAS=my-key-alias
+   MYAPP_UPLOAD_STORE_PASSWORD=*****
+   MYAPP_UPLOAD_KEY_PASSWORD=*****
+   ```
+
+### Step 3: Configure Gradle for Signing
+
+1. **Edit the `android/app/build.gradle` file:**
+
+   Add the signing configuration to the `android` block:
+
+   ```gradle
+   android {
+       ...
+       signingConfigs {
+           release {
+               if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
+                   storeFile file(MYAPP_UPLOAD_STORE_FILE)
+                   storePassword MYAPP_UPLOAD_STORE_PASSWORD
+                   keyAlias MYAPP_UPLOAD_KEY_ALIAS
+                   keyPassword MYAPP_UPLOAD_KEY_PASSWORD
+               }
+           }
+       }
+       buildTypes {
+           release {
+               signingConfig signingConfigs.release
+               minifyEnabled false
+               proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+           }
+       }
+   }
+   ```
+
+### Step 4: Generate the APK
+
+To generate the APK file, run the following commands in the terminal:
+
+```bash
+cd android
+./gradlew assembleRelease
+```
+
+This command creates a release APK, which can be found in `android/app/build/outputs/apk/release/`.
+
+### Step 5: Locate the APK and Transfer to Device
+
+1. **The APK file will be located in `android/app/build/outputs/apk/release/`.**
+2. **Transfer the APK file to your device via Google Drive or any other preferred method.**

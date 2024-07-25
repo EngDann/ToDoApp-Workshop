@@ -31,8 +31,9 @@ export default function App() {
               <TouchableOpacity key={index} onPress={() => iniciarEdicao(index, tarefas, setTarefa, setEditIndex)}>
                 <Tarefa
                   texto={item}
-                  onDelete={() => deletarTarefa(index, tarefas, setTarefas)}
+                  onDelete={() => deletarTarefa(index, tarefas, setTarefas, setTarefa, setEditIndex)}
                 />
+
               </TouchableOpacity>
             ))}
           </View>

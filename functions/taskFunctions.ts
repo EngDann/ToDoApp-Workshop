@@ -27,11 +27,16 @@ export const adicionarOuEditarTarefa = (
 export const deletarTarefa = (
   index: number,
   tarefas: string[],
-  setTarefas: React.Dispatch<React.SetStateAction<string[]>>
+  setTarefas: React.Dispatch<React.SetStateAction<string[]>>,
+  setTarefa: React.Dispatch<React.SetStateAction<string | null>>,
+  setEditIndex: React.Dispatch<React.SetStateAction<number | null>>,
 ) => {
   const novasTarefas = tarefas.filter((_, i) => i !== index);
   setTarefas(novasTarefas);
+  setTarefa(''); // Limpa a barra de escrever
+  setEditIndex(null); // Define o índice de edição como null
 };
+
 
 export const iniciarEdicao = (
   index: number,
