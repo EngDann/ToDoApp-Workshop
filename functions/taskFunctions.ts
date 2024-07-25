@@ -1,4 +1,4 @@
-import { Keyboard } from 'react-native';
+import {Keyboard} from 'react-native';
 
 export const adicionarOuEditarTarefa = (
   tarefa: string | null,
@@ -6,7 +6,7 @@ export const adicionarOuEditarTarefa = (
   setTarefas: React.Dispatch<React.SetStateAction<string[]>>,
   setTarefa: React.Dispatch<React.SetStateAction<string | null>>,
   tarefas: string[],
-  setEditIndex: React.Dispatch<React.SetStateAction<number | null>>
+  setEditIndex: React.Dispatch<React.SetStateAction<number | null>>,
 ) => {
   if (tarefa && tarefa.trim() !== '') {
     if (editIndex !== null) {
@@ -37,12 +37,11 @@ export const deletarTarefa = (
   setEditIndex(null); // Define o índice de edição como null
 };
 
-
 export const iniciarEdicao = (
   index: number,
   tarefas: string[],
   setTarefa: React.Dispatch<React.SetStateAction<string | null>>,
-  setEditIndex: React.Dispatch<React.SetStateAction<number | null>>
+  setEditIndex: React.Dispatch<React.SetStateAction<number | null>>,
 ) => {
   setTarefa(tarefas[index]);
   setEditIndex(index);

@@ -1,9 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Keyboard, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import Tarefa from './components/Tarefa';
-import { salvarTarefas, carregarTarefas } from './services/storageService';
-import { adicionarOuEditarTarefa, deletarTarefa, iniciarEdicao } from './functions/taskFunctions';
+import {salvarTarefas, carregarTarefas} from './services/storageService';
+import {
+  adicionarOuEditarTarefa,
+  deletarTarefa,
+  iniciarEdicao,
+} from './functions/taskFunctions';
 
 export default function App() {
   const [tarefa, setTarefa] = useState<string | null>('');
@@ -21,39 +33,60 @@ export default function App() {
   return (
     <View style={estilos.container}>
       <ScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        keyboardShouldPersistTaps='handled'
-      >
+        contentContainerStyle={{flexGrow: 1}}
+        keyboardShouldPersistTaps="handled">
         <View style={estilos.taskWrapper}>
           <Text style={estilos.sectionTitle}>Tarefas de Hoje</Text>
           <View style={estilos.items}>
             {tarefas.map((item, index) => (
-              <TouchableOpacity key={index} onPress={() => iniciarEdicao(index, tarefas, setTarefa, setEditIndex)}>
+              <TouchableOpacity
+                key={index}
+                onPress={() =>
+                  iniciarEdicao(index, tarefas, setTarefa, setEditIndex)
+                }>
                 <Tarefa
                   texto={item}
-                  onDelete={() => deletarTarefa(index, tarefas, setTarefas, setTarefa, setEditIndex)}
+                  onDelete={() =>
+                    deletarTarefa(
+                      index,
+                      tarefas,
+                      setTarefas,
+                      setTarefa,
+                      setEditIndex,
+                    )
+                  }
                 />
-
               </TouchableOpacity>
             ))}
           </View>
         </View>
       </ScrollView>
 
-      <KeyboardAvoidingView 
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={estilos.writeTaskWrapper}
-      >
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={estilos.writeTaskWrapper}>
         <TextInput
           style={estilos.input}
-          placeholder='Escreva uma tarefa'
+          placeholder="Escreva uma tarefa"
           placeholderTextColor={'#000000'}
           value={tarefa || ''}
           onChangeText={setTarefa}
         />
-        <TouchableOpacity onPress={() => adicionarOuEditarTarefa(tarefa, editIndex, setTarefas, setTarefa, tarefas, setEditIndex)}>
+        <TouchableOpacity
+          onPress={() =>
+            adicionarOuEditarTarefa(
+              tarefa,
+              editIndex,
+              setTarefas,
+              setTarefa,
+              tarefas,
+              setEditIndex,
+            )
+          }>
           <View style={estilos.addWrapper}>
-            <Text style={estilos.addText}>{editIndex !== null ? '✓' : '+'}</Text>
+            <Text style={estilos.addText}>
+              {editIndex !== null ? '✓' : '+'}
+            </Text>
           </View>
         </TouchableOpacity>
       </KeyboardAvoidingView>

@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faTrash, faCheck } from '@fortawesome/free-solid-svg-icons';
+import React, {useState} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faTrash, faCheck} from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
   texto: string;
   onDelete: () => void;
 }
 
-const Tarefa: React.FC<Props> = ({ texto, onDelete }) => {
+const Tarefa: React.FC<Props> = ({texto, onDelete}) => {
   const [concluida, setConcluida] = useState<boolean>(false);
 
   const toggleConcluida = () => {
@@ -20,10 +20,16 @@ const Tarefa: React.FC<Props> = ({ texto, onDelete }) => {
       {/* Linha horizontal para tarefas concluídas */}
       {concluida && <View style={estilos.linhaConcluida} />}
       <TouchableOpacity onPress={toggleConcluida} style={estilos.itemEsquerda}>
-        <View style={[estilos.quadrado, concluida && estilos.quadradoConcluido]}>
-          {concluida && <FontAwesomeIcon icon={faCheck} style={estilos.checkIcon} />}
+        <View
+          style={[estilos.quadrado, concluida && estilos.quadradoConcluido]}>
+          {concluida && (
+            <FontAwesomeIcon icon={faCheck} style={estilos.checkIcon} />
+          )}
         </View>
-        <Text style={[estilos.textoItem, concluida && estilos.textoItemConcluido]}>{texto}</Text>
+        <Text
+          style={[estilos.textoItem, concluida && estilos.textoItemConcluido]}>
+          {texto}
+        </Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={onDelete}>
         <FontAwesomeIcon icon={faTrash} style={estilos.iconeDeletar} />
